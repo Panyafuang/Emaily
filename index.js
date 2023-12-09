@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+var cors = require('cors');
 
 const keys = require('./config/key');
 
@@ -13,7 +14,7 @@ require('./services/passport.service');
 mongoose.connect(keys.mongo.uri);
 
 const app = express();
-
+app.use(cors());
 /** Tell express we gonna use cookie */
 app.use(cookieSession({
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days

@@ -45,29 +45,26 @@ passport.use(
       callbackURL: "/auth/google/callback", // URL After user login with google account.
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
-      // console.log('accessToken -> ', accessToken); // automatically expires after some amount of time.
-      // console.log('refreshToken -> ', refreshToken); // allow us to refresh accessToken.
-      // console.log('profile -> ', profile);
-      // console.log('done -> ', done); // call done function to tell passport that we have now finished.
+    /**
+     * 
+     * @param {*} accessToken automatically expires after some amount of time.
+     * @param {*} refreshToken allow us to refresh accessToken.
+     * @param {*} profile google account profile.
+     * @param {*} done call done function to tell passport that we have now finished.
+     */
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id })
 
-      User.findOne({ googleId: profile.id })
-        .then((existingUser) => {
-          if (existingUser) {
-            // We already have a record with the given profile ID
-            /**
-             * 2 argument (error, user)
-             */
-            done(null, existingUser);
-          } else {
-            // We don't have a user record with this ID, make a new record
-            /** Create record or model instance */
-            new User({ googleId: profile.id }).save()
-              .then(newUser => {
-                done(null, newUser);
-              });
-          }
-        });
+      if (existingUser) {
+        // We already have a record with the given profile ID
+        /** 2 argument (error, user) */
+        return done(null, existingUser);
+      }
+
+      // We don't have a user record with this ID, make a new record
+      /** Create record or model instance */
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
