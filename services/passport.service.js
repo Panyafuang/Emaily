@@ -43,12 +43,13 @@ passport.use(
       clientID: keys.google.client_id, // can be publish.
       clientSecret: keys.google.client_secret, // keep this thing secret.
       callbackURL: "/auth/google/callback", // URL After user login with google account.
+      proxy: true
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log('accessToken -> ', accessToken); // automatically expires after some amount of time.
-      console.log('refreshToken -> ', refreshToken); // allow us to refresh accessToken.
-      console.log('profile -> ', profile);
-      console.log('done -> ', done); // call done function to tell passport that we have now finished.
+      // console.log('accessToken -> ', accessToken); // automatically expires after some amount of time.
+      // console.log('refreshToken -> ', refreshToken); // allow us to refresh accessToken.
+      // console.log('profile -> ', profile);
+      // console.log('done -> ', done); // call done function to tell passport that we have now finished.
 
       User.findOne({ googleId: profile.id })
         .then((existingUser) => {
