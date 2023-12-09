@@ -8,6 +8,28 @@ const keys = require('../config/key');
 const User = mongoose.model('User');
 
 
+/** Call serializeUser with the user to generate the identifying piece of info, And then passport will eventually stuff that into a cookie. */
+passport.serializeUser((user, done) => {
+  /**
+   * 2 arguments
+   * null = error
+   * user.id = identifying piece of information that is going to identify the user and follow 
+   * up requests. user.id ในที่นี่คือ id จาก mongoDB.
+   * Why we're using this mongo to identifier rather that profile.id, The reason is that we can very easily be making use of multiple different authentication provider. we might have google sign in, facebook sign in, etc.
+   */
+  done(null, user.id);
+});
+
+
+
+/** Take the user id that we had stuffed in the cookie and turn it back into an actual user model. And add to req.user Its coming from Passport, specifically from the 'app.use(passport())' middleware*/
+passport.deserializeUser((id, done) => {
+  User.findById(id)
+    .then(user => {
+      done(null, user);
+    })
+});
+
 
 
 // ─── Inform Passport To Know Google ──────────────────────────────────────────

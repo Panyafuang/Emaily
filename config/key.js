@@ -15,5 +15,8 @@ module.exports = {
   },
   mongo: {
     uri: 'mongodb+srv://Thanadilok:qjrMyxhv00qq4vXd@emaily.zh5t9rg.mongodb.net/?retryWrites=true&w=majority'
+  },
+  cookie: {
+    key: 'asdfjadkfjasldkfasdfasdfasdfasdfasdf'
   }
 }
